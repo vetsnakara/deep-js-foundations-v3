@@ -25,7 +25,7 @@ if (!Object.is || true) {
     }
 
     function isNegZero(v) {
-      return v === 0 && 1/v === -Infinity;
+      return 1/v === -Infinity;
     }
   }
 }
