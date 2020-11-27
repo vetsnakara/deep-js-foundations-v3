@@ -2,15 +2,31 @@
 
 if (!Object.is || true) {
   Object.is = function ObjectIs(a, b) {
-    // both NaN
-    if (a !== a && b !== b) return true;
+    var isNegZeroA = isNegZero(a);
+    var isNegZeroB = isNegZero(b);
 
-    // 0 and -0
-    if (1/a === -Infinity && 1/b === -Infinity) return true;
-    if (a === 0 && 1/b === -Infinity) return false;
-    if (1/a === -Infinity && b === 0) return false;
+    // case: -0
+    if (isNegZeroA || isNegZeroB) {
+      //  -0  any  -> false
+      // any   -0  -> false
+      //  -0   -0  -> true
+      return isNegZeroA && isNegZeroB;
+    }
+
+    // case: both NaN
+    if (isNaN(a) && isNaN(b)) return true;
 
     return a === b;
+
+    // ................
+
+    function isNaN(v) {
+      return v !== v; // or Number.isNaN(..)
+    }
+
+    function isNegZero(v) {
+      return v === 0 && 1/v === -Infinity;
+    }
   }
 }
 
